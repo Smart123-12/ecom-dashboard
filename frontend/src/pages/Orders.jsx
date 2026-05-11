@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Search, Eye, X, ChevronLeft, ChevronRight, Package } from 'lucide-react';
-import { useToastStore } from '../lib/store';
+import { Search, Eye, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useToastStore, useOrderStore } from '../lib/store';
 
 const STATUSES = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
 const STATUS_COLOR = {
@@ -8,23 +8,16 @@ const STATUS_COLOR = {
   Shipped: 'bg-purple-100 text-purple-700', Delivered: 'bg-green-100 text-green-700', Cancelled: 'bg-red-100 text-red-700'
 };
 
-const INITIAL_ORDERS = [
-  { id: '#ORD-5234', customer: 'Aarav Shah', email: 'aarav@example.com', product: 'Samsung Galaxy S24 Ultra', amount: 1099, status: 'Delivered', date: 'May 10, 2024', payment: 'Stripe', img: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=60&h=60&fit=crop' },
-  { id: '#ORD-5233', customer: 'Priya Mehta', email: 'priya@example.com', product: 'Apple AirPods Pro', amount: 189, status: 'Processing', date: 'May 10, 2024', payment: 'Razorpay', img: 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=60&h=60&fit=crop' },
-  { id: '#ORD-5232', customer: 'Rohan Patel', email: 'rohan@example.com', product: 'Nike Air Max 270', amount: 150, status: 'Shipped', date: 'May 09, 2024', payment: 'PayPal', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=60&h=60&fit=crop' },
-  { id: '#ORD-5231', customer: 'Sneha Joshi', email: 'sneha@example.com', product: 'Ergonomic Gaming Chair', amount: 399, status: 'Pending', date: 'May 09, 2024', payment: 'Stripe', img: 'https://images.unsplash.com/photo-1598550874175-4d0ef436c909?w=60&h=60&fit=crop' },
-  { id: '#ORD-5230', customer: 'Karan Desai', email: 'karan@example.com', product: 'Nikon D3500 DSLR', amount: 489, status: 'Cancelled', date: 'May 08, 2024', payment: 'PayPal', img: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=60&h=60&fit=crop' },
-  { id: '#ORD-5229', customer: 'Meera Shah', email: 'meera@example.com', product: 'Instant Pot Duo', amount: 79, status: 'Delivered', date: 'May 07, 2024', payment: 'Stripe', img: 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=60&h=60&fit=crop' },
-  { id: '#ORD-5228', customer: 'Dev Parmar', email: 'dev@example.com', product: "Levi's 511 Slim Jeans", amount: 39, status: 'Delivered', date: 'May 06, 2024', payment: 'Razorpay', img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=60&h=60&fit=crop' },
-];
+
+
 
 export default function Orders() {
-  const [orders, setOrders] = useState(INITIAL_ORDERS);
+  const { orders, updateStatus } = useOrderStore();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const [view, setView] = useState(null);
   const [page, setPage] = useState(1);
-  const PER = 5;
+  const PER = 6;
   const addToast = useToastStore((s) => s.addToast);
 
   const filtered = orders.filter((o) =>
@@ -34,10 +27,10 @@ export default function Orders() {
   const pages = Math.ceil(filtered.length / PER);
   const paged = filtered.slice((page - 1) * PER, page * PER);
 
-  const updateStatus = (id, newStatus) => {
-    setOrders((os) => os.map((o) => o.id === id ? { ...o, status: newStatus } : o));
+  const changeStatus = (id, newStatus) => {
+    updateStatus(id, newStatus);
     if (view?.id === id) setView((v) => ({ ...v, status: newStatus }));
-    addToast(`Order ${id} status → ${newStatus} ✅`, 'success');
+    addToast(`Order ${id} → ${newStatus} ✅`, 'success');
   };
 
   return (
@@ -99,7 +92,7 @@ export default function Orders() {
                     <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${STATUS_COLOR[o.status]}`}>{o.status}</span>
                   </td>
                   <td className="px-4 py-3">
-                    <select value={o.status} onChange={(e) => updateStatus(o.id, e.target.value)}
+                    <select value={o.status} onChange={(e) => changeStatus(o.id, e.target.value)}
                       className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 outline-none focus:border-[#2874F0] bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                       {STATUSES.map((s) => <option key={s}>{s}</option>)}
                     </select>
@@ -154,7 +147,7 @@ export default function Orders() {
                 <p className="text-xs font-bold text-gray-500 uppercase mb-2">Update Status</p>
                 <div className="flex flex-wrap gap-2">
                   {STATUSES.map((s) => (
-                    <button key={s} onClick={() => updateStatus(view.id, s)}
+                    <button key={s} onClick={() => changeStatus(view.id, s)}
                       className={`text-xs px-3 py-1.5 rounded-lg font-bold border transition-colors ${view.status === s ? 'bg-[#2874F0] text-white border-[#2874F0]' : 'border-gray-200 text-gray-600 hover:border-gray-300'}`}>
                       {s}
                     </button>

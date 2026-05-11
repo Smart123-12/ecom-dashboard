@@ -1,17 +1,6 @@
 import { useState } from 'react';
 import { Search, Plus, Edit2, Trash2, X, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useToastStore } from '../lib/store';
-
-const INITIAL = [
-  { id: 1, name: 'Samsung Galaxy S24 Ultra', category: 'Mobiles', price: 1099, stock: 45, status: 'Active', sku: 'MOB-001', img: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=200&h=200&fit=crop' },
-  { id: 2, name: 'Apple AirPods Pro', category: 'Electronics', price: 189, stock: 120, status: 'Active', sku: 'ELE-002', img: 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=200&h=200&fit=crop' },
-  { id: 3, name: 'Nike Air Max 270', category: 'Fashion', price: 150, stock: 3, status: 'Low Stock', sku: 'FAS-003', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop' },
-  { id: 4, name: 'Ergonomic Gaming Chair', category: 'Furniture', price: 399, stock: 18, status: 'Active', sku: 'FUR-004', img: 'https://images.unsplash.com/photo-1598550874175-4d0ef436c909?w=200&h=200&fit=crop' },
-  { id: 5, name: 'Nikon D3500 DSLR', category: 'Electronics', price: 489, stock: 0, status: 'Out of Stock', sku: 'ELE-005', img: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=200&h=200&fit=crop' },
-  { id: 6, name: 'Instant Pot Duo', category: 'Appliances', price: 79, stock: 67, status: 'Active', sku: 'APP-006', img: 'https://images.unsplash.com/photo-1585515320310-259814833e62?w=200&h=200&fit=crop' },
-  { id: 7, name: "Levi's 511 Slim Jeans", category: 'Fashion', price: 39, stock: 200, status: 'Active', sku: 'FAS-007', img: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=200&h=200&fit=crop' },
-  { id: 8, name: 'Mi Smart Band 8', category: 'Mobiles', price: 29, stock: 340, status: 'Active', sku: 'MOB-008', img: 'https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=200&h=200&fit=crop' },
-];
+import { useToastStore, useProductStore } from '../lib/store';
 
 const CATS = ['Mobiles', 'Electronics', 'Fashion', 'Furniture', 'Appliances', 'Beauty', 'Books', 'Sports'];
 const STATUS_COLOR = { Active: 'bg-green-100 text-green-700', 'Low Stock': 'bg-yellow-100 text-yellow-700', 'Out of Stock': 'bg-red-100 text-red-700', Inactive: 'bg-gray-100 text-gray-600' };
@@ -78,14 +67,14 @@ function ProductForm({ product, onSave, onClose }) {
 }
 
 export default function Products() {
-  const [products, setProducts] = useState(INITIAL);
+  const { products, addProduct, updateProduct, deleteProduct } = useProductStore();
   const [search, setSearch] = useState('');
   const [cat, setCat] = useState('All');
   const [modal, setModal] = useState(null);
   const [view, setView] = useState(null);
   const [del, setDel] = useState(null);
   const [page, setPage] = useState(1);
-  const PER = 5;
+  const PER = 6;
   const addToast = useToastStore((s) => s.addToast);
 
   const filtered = products.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()) && (cat === 'All' || p.category === cat));
@@ -94,17 +83,17 @@ export default function Products() {
 
   const save = (data) => {
     if (products.find((p) => p.id === data.id)) {
-      setProducts((ps) => ps.map((p) => p.id === data.id ? data : p));
+      updateProduct(data);
       addToast('Product updated! ✅', 'success');
     } else {
-      setProducts((ps) => [data, ...ps]);
-      addToast('Product added! 🎉', 'success');
+      addProduct(data);
+      addToast('Product added! 🎉 Visible on Home page now!', 'success');
     }
     setModal(null);
   };
 
   const remove = () => {
-    setProducts((ps) => ps.filter((p) => p.id !== del.id));
+    deleteProduct(del.id);
     addToast(`"${del.name}" deleted.`, 'info');
     setDel(null);
   };

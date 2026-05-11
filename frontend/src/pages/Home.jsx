@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Heart, Search, Star, ArrowRight, Truck, Shield, RefreshCw, Tag, ChevronRight, Bell, User } from 'lucide-react';
-import { useCartStore, useWishlistStore, useAuthStore, useToastStore } from '../lib/store';
+import { ShoppingCart, Heart, Search, Star, ArrowRight, Truck, Shield, RefreshCw, Tag, ChevronRight, User } from 'lucide-react';
+import { useCartStore, useWishlistStore, useAuthStore, useToastStore, useProductStore } from '../lib/store';
 
 const CATEGORIES = [
   { name: 'Mobiles', emoji: '📱', color: 'from-blue-400 to-blue-600' },
@@ -41,6 +41,8 @@ const Home = () => {
   const { toggle, has } = useWishlistStore();
   const { user, isAuthenticated } = useAuthStore();
   const addToast = useToastStore((s) => s.addToast);
+  // 👇 Live products from global store (admin/seller additions appear here!)
+  const { products: ALL_PRODUCTS } = useProductStore();
 
   const handleAddToCart = (product) => {
     addItem(product);
@@ -54,7 +56,7 @@ const Home = () => {
     addToast(has(product.id) ? 'Removed from wishlist' : `"${product.name}" added to wishlist! ❤️`, has(product.id) ? 'info' : 'success');
   };
 
-  const filtered = PRODUCTS.filter((p) =>
+  const filtered = ALL_PRODUCTS.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()) &&
     (activeCategory === 'All' || p.category === activeCategory)
   );
