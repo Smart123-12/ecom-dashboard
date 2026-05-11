@@ -1,7 +1,7 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, ShoppingBag, Package, Users, Settings,
-  LogOut, Menu, X, Bell, Sun, Moon, TrendingUp, CreditCard, BarChart2
+  LogOut, Menu, X, Bell, Sun, Moon, TrendingUp, CreditCard, BarChart2, Tag, UserCog, Home
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useThemeStore, useAuthStore } from '../lib/store';
@@ -14,6 +14,8 @@ const navItems = [
   { name: 'Products',       path: '/admin/products',       icon: Package },
   { name: 'Customers',      path: '/admin/customers',      icon: Users },
   { name: 'Payments',       path: '/admin/payments',       icon: CreditCard },
+  { name: 'Coupons',        path: '/admin/coupons',        icon: Tag },
+  { name: 'User Mgmt',      path: '/admin/users',          icon: UserCog },
   { name: 'Notifications',  path: '/admin/notifications',  icon: Bell },
   { name: 'Settings',       path: '/admin/settings',       icon: Settings },
 ];

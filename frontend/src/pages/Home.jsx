@@ -89,10 +89,10 @@ const Home = () => {
           {/* Nav Actions */}
           <div className="flex items-center gap-2 ml-auto flex-shrink-0">
             {isAuthenticated ? (
-              <div className="flex items-center gap-1 bg-white text-[#2874F0] px-3 py-2 rounded-lg text-sm font-bold cursor-pointer hover:bg-blue-50">
+              <Link to="/my-account" className="flex items-center gap-1 bg-white text-[#2874F0] px-3 py-2 rounded-lg text-sm font-bold hover:bg-blue-50">
                 <User size={16} />
                 <span className="hidden sm:block">{user?.name?.split(' ')[0]}</span>
-              </div>
+              </Link>
             ) : (
               <Link to="/login" className="bg-white text-[#2874F0] px-5 py-2 rounded-lg text-sm font-extrabold hover:bg-blue-50">Login</Link>
             )}
