@@ -38,7 +38,7 @@ const Home = () => {
   const [cartAnimate, setCartAnimate] = useState(null);
   const navigate = useNavigate();
   const { addItem, count } = useCartStore();
-  const { toggle, has } = useWishlistStore();
+  const { toggle, has, items } = useWishlistStore();
   const { user, isAuthenticated } = useAuthStore();
   const addToast = useToastStore((s) => s.addToast);
   // 👇 Live products from global store (admin/seller additions appear here!)
@@ -96,14 +96,20 @@ const Home = () => {
             ) : (
               <Link to="/login" className="bg-white text-[#2874F0] px-5 py-2 rounded-lg text-sm font-extrabold hover:bg-blue-50">Login</Link>
             )}
-            <button onClick={() => navigate('/admin')} className="relative text-white px-3 py-2 hover:bg-blue-700 rounded-lg transition-colors" title="Admin Panel">
+            {/* Wishlist */}
+            <Link to="/wishlist" className="relative text-white px-3 py-2 hover:bg-blue-700 rounded-lg transition-colors" title="Wishlist">
+              <Heart size={20} />
+              {items.length > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center">{items.length}</span>
+              )}
+            </Link>
+            {/* Cart */}
+            <Link to="/cart" className="relative text-white px-3 py-2 hover:bg-blue-700 rounded-lg transition-colors" title="Cart">
               <ShoppingCart size={20} />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-yellow-400 text-gray-900 text-xs font-bold rounded-full flex items-center justify-center">
-                  {cartCount}
-                </span>
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-yellow-400 text-gray-900 text-xs font-bold rounded-full flex items-center justify-center">{cartCount}</span>
               )}
-            </button>
+            </Link>
             <Link to="/admin" className="text-white text-xs font-semibold bg-blue-700 px-3 py-2 rounded-lg hover:bg-blue-800 hidden md:block">
               Admin ↗
             </Link>
