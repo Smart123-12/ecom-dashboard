@@ -4,6 +4,8 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Products from './pages/Products';
 import Orders from './pages/Orders';
+import Customers from './pages/Customers';
+import Settings from './pages/Settings';
 
 function App() {
   // Using HashRouter for flawless GitHub Pages static deployment
@@ -17,6 +19,8 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="products" element={<Products />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="customers" element={<Customers />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
 
         {/* Redirect unknown routes */}
