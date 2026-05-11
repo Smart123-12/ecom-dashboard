@@ -2,14 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { registerUser, loginUser, getMe } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
+const { validateRegister, validateLogin } = require('../middleware/validate');
 
-// POST /api/auth/register
-router.post('/register', registerUser);
-
-// POST /api/auth/login
-router.post('/login', loginUser);
-
-// GET /api/auth/me  (protected)
-router.get('/me', protect, getMe);
+router.post('/register', validateRegister, registerUser);
+router.post('/login',    validateLogin,    loginUser);
+router.get('/me',        protect,          getMe);
 
 module.exports = router;
