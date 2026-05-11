@@ -1,50 +1,133 @@
-# Modern Full-Stack eCommerce Dashboard
+# 🛒 Modern Full-Stack eCommerce Dashboard
 
-This repository contains the complete full-stack code for the eCommerce dashboard. It includes a beautiful React frontend, a scalable Node.js + Prisma backend, and supplementary PHP APIs.
+A production-ready, scalable eCommerce admin dashboard built with **React**, **Node.js**, **PHP**, and **MySQL/PostgreSQL**.
 
-## Folder Structure
+---
 
-- `/frontend` - React + Vite + Tailwind UI (Configured for GitHub Pages deployment)
-- `/backend-node` - Express + Prisma ORM REST API (MySQL/PostgreSQL)
-- `/backend-php` - PHP Backend API endpoints
+## 📁 Project Structure
 
-## Frontend Demo Deployment (GitHub Pages)
+```
+ecomarce/
+├── frontend/          → React + Vite + TailwindCSS (GitHub Pages Demo)
+│   └── src/
+│       ├── pages/     → Dashboard, Login, Register, Products, Orders, Customers, Settings
+│       ├── layouts/   → AdminLayout (Sidebar + Navbar)
+│       └── lib/       → Utility functions
+│
+├── backend-node/      → Node.js + Express + Prisma (REST API)
+│   ├── controllers/   → authController, productController, orderController
+│   ├── routes/        → authRoutes, productRoutes, orderRoutes
+│   ├── middleware/     → JWT auth + Admin role guard
+│   └── prisma/        → schema.prisma + seed.js
+│
+├── backend-php/       → PHP REST API (MySQL)
+│   ├── config/        → db.php (database connection)
+│   ├── auth.php       → Login & Register API
+│   └── products.php   → Products CRUD API
+│
+└── database/
+    └── schema.sql     → Full MySQL schema (10 tables with indexes & seed data)
+```
 
-The frontend is specifically configured to deploy to your GitHub account for free, running as a static demonstration using React `HashRouter`.
+---
 
-1. Open a terminal in the root directory and initialize git:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-   git push -u origin main
-   ```
-2. Navigate to the frontend folder and deploy:
-   ```bash
-   cd frontend
-   npm install
-   npm run deploy
-   ```
-   *This will compile the React code and automatically push it to the `gh-pages` branch, making your dashboard live.*
+## 🚀 GitHub Pages Demo Deployment (FREE)
 
-## Backend Setup (Local Development)
+The frontend demo is configured to deploy to **GitHub Pages for free** with zero server costs.
 
-Because GitHub Pages only supports static frontend sites, the Node.js and PHP APIs must be run on a traditional server (like Render, AWS, or your local machine) to be fully functional.
+### Step 1: Create GitHub Repo
+Go to [github.com/new](https://github.com/new) and create an empty repository.
 
-### Node.js Setup
-1. `cd backend-node`
-2. `npm install`
-3. Update the `.env` file with your MySQL/PostgreSQL connection string:
-   `DATABASE_URL="mysql://user:password@localhost:3306/ecommerce"`
-4. Run `npx prisma db push` to generate the database tables.
-5. Run `node index.js` to start the server.
+### Step 2: Push Code to GitHub
+```bash
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+git push -u origin main
+```
 
-### PHP Setup
-Place the `backend-php` folder inside your XAMPP/WAMP `htdocs` or standard Apache/Nginx web root to serve the PHP API endpoints.
+### Step 3: Deploy to GitHub Pages
+```bash
+cd frontend
+npm run deploy
+```
+✅ Your dashboard will be live at: `https://YOUR_USERNAME.github.io/YOUR_REPO`
 
-## Tech Stack
-- **Frontend:** React, Vite, TailwindCSS, Recharts, Lucide React
-- **Backend:** Node.js, Express, Prisma (and PHP)
-- **Database:** PostgreSQL / MySQL
+---
+
+## ⚙️ Node.js Backend Setup (Local)
+
+```bash
+cd backend-node
+npm install
+cp .env.example .env     # Fill in your DB credentials
+npx prisma db push       # Creates all tables in your DB
+node prisma/seed.js      # Adds demo data
+node index.js            # Start the server (port 5000)
+```
+
+### API Endpoints
+| Method | Route | Description | Auth |
+|--------|-------|-------------|------|
+| POST | `/api/auth/register` | Register new user | Public |
+| POST | `/api/auth/login` | Login & get JWT | Public |
+| GET | `/api/auth/me` | Get current user | JWT |
+| GET | `/api/products` | List products (search, pagination) | Public |
+| POST | `/api/products` | Create product | Admin |
+| PUT | `/api/products/:id` | Update product | Admin |
+| DELETE | `/api/products/:id` | Delete product | Admin |
+| GET | `/api/orders` | List all orders | Admin |
+| PATCH | `/api/orders/:id/status` | Update order status | Admin |
+
+---
+
+## 🐘 PHP Backend Setup (XAMPP/Shared Hosting)
+
+1. Copy the `backend-php/` folder into your XAMPP `htdocs/` or web root.
+2. Visit `http://localhost/backend-php/auth.php?action=login` to test.
+
+---
+
+## 🗄️ Database Setup (MySQL)
+
+```bash
+mysql -u root -p < database/schema.sql
+```
+This creates all 10 tables: `users`, `products`, `categories`, `orders`, `order_items`, `payments`, `cart`, `wishlists`, `reviews`, `coupons`, `notifications`.
+
+---
+
+## 🔑 Admin Credentials (Demo)
+
+| Field | Value |
+|-------|-------|
+| Email | `admin@example.com` |
+| Password | `admin123` |
+| Role | `ADMIN` |
+
+---
+
+## 🔒 Environment Variables (.env)
+
+```env
+DATABASE_URL="mysql://root:password@localhost:3306/ecommerce"
+JWT_SECRET="your_super_secret_key"
+STRIPE_SECRET_KEY="sk_test_..."
+PAYPAL_CLIENT_ID="your_paypal_id"
+RAZORPAY_KEY_ID="rzp_test_..."
+PORT=5000
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Tech |
+|-------|------|
+| Frontend | React 19, Vite, TailwindCSS v4, Recharts, React Router |
+| Node Backend | Express.js, Prisma ORM, JWT, bcrypt |
+| PHP Backend | PHP 8, MySQLi, password_hash |
+| Database | MySQL / PostgreSQL |
+| Deployment | GitHub Pages (Frontend), Any PHP/Node host (Backend) |
+
+---
+
+*Built with ❤️ — Full-stack, production-ready.*

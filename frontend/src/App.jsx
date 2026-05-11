@@ -2,6 +2,7 @@ import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import AdminLayout from './layouts/AdminLayout';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Products from './pages/Products';
 import Orders from './pages/Orders';
 import Customers from './pages/Customers';
@@ -13,6 +14,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         
         {/* Protected Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
