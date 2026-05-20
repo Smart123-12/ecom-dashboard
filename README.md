@@ -2,6 +2,8 @@
 
 A production-ready, scalable eCommerce admin dashboard built with **React**, **Node.js**, **PHP**, and **MySQL/PostgreSQL**.
 
+For a Demo Site - https://smart123-12.github.io/ecom-dashboard/
+
 ---
 
 ## 📁 Project Structure
